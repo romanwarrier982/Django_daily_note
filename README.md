@@ -44,3 +44,63 @@ This is a comprehensive task for developing a note-taking application with integ
 #### 5. Dockerization
 - Create Dockerfiles for the backend and frontend.
 - Use docker-compose to set up services for the application, including the database.
+
+
+
+## Getting Started
+
+### Prerequisites
+
+- [Python 3.8](https://www.python.org/downloads/)
+- [Node.js](https://nodejs.org/en/download/)
+- [PostgreSQL](https://www.postgresql.org/download/)
+
+### Installation
+
+1. Clone the repo
+
+   ```sh
+   git clone https://github.com/pyindent/daily-note-django-react.git
+
+   cd django_react_auth_system
+   ```
+
+2. Install Python packages. It is recommended to use a virtual environment.
+
+   ```sh
+   (windows)
+   python -m venv venv
+   .\venv\Scripts\activate
+   
+   (linux)
+   virtualenv venv && source venv/bin/activate # Create a virtual environment and activate it
+
+   cd backend
+   pip install -r requirements.txt
+   ```
+
+3. Create a `.env` file in backend directory and add the variables as shown in the .env-example file. You will need to add your own values for the variables. You can optionally export the variables as environment variables to your terminal.
+
+4. Create a PostgreSQL database and add the database credentials to the `.env` file or export them as environment variables to your terminal.
+
+5. Run the migrations
+
+   ```sh
+   python manage.py migrate
+   ```
+
+7. Run the backend server
+
+   ```sh
+   python manage.py runserver
+   ```
+
+   This will run the backend server on [http://localhost:8000](http://localhost:8000)
+
+8. (Optional) Run the frontend server. You can skip this step if you don't want to run the frontend separately as the frontend is already built and being served by the backend.
+
+   ```sh
+   cd frontend && npm start
+   ```
+
+   This will run the frontend server on [http://localhost:3000](http://localhost:3000)
