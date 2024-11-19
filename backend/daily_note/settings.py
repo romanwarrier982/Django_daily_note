@@ -48,8 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'djoser',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'notes',
 ]
 
@@ -155,6 +158,7 @@ SIMPLE_JWT = {
 # Will be used on email templates sent to users
 DOMAIN = os.environ.get("DOMAIN")
 SITE_NAME = os.environ.get("SITE_NAME")
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
