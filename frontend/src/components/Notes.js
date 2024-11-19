@@ -1,13 +1,34 @@
-import React, { useEffect, useState } from 'react';  
+import React, { useEffect, useState } from 'react';
+import axios from "axios";
 import { Link } from 'react-router-dom';  
 
-const Notes = () => {  
+export const Notes = () => {  
     const [notes, setNotes] = useState([]);  
     const [title, setTitle] = useState('');  
-    const [description, setDescription] = useState('');  
+    const [description, setDescription] = useState('');
 
-    useEffect(() => {  
-        fetchNotes();  
+    useEffect(() => {
+        if (localStorage.getItem('access_token') === null) {
+            console.log('###############')
+            window.location.href = '/login'
+        }
+        else {
+            (async () => {
+                try {
+                    // const { data } = await axios.get(
+                    //     'http://localhost:8000/notes/', {
+                    //     headers: {
+                    //         'Content-Type': 'application/json'
+                    //     }
+                    // }
+                    // );
+                    // fetchNotes();
+                } catch (e) {
+                    console.log('not auth')
+                }
+            })()
+        };
+         
     }, []);  
 
     const fetchNotes = async () => {  
@@ -65,6 +86,4 @@ const Notes = () => {
             </ul>  
         </div>  
     );  
-};  
-
-export default Notes;
+};

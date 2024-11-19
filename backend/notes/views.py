@@ -1,11 +1,14 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import generics, viewsets, permissions, status
-from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 from .models import Note, Audio
-from .serializers import NoteSerializer, AudioSerializer, UserLoginSerializer, UserSerializer
+from .serializers import NoteSerializer, AudioSerializer, UserSerializer
+from rest_framework.permissions import AllowAny  
+from rest_framework_simplejwt.views import TokenObtainPairView 
 
 class NoteViewSet(viewsets.ModelViewSet):
     queryset = Note.objects.all()
@@ -28,14 +31,16 @@ class AudioViewSet(viewsets.ModelViewSet):
 
 class RegisterView(generics.CreateAPIView):  
     queryset = User.objects.all()  
-    serializer_class = UserSerializer  
+    serializer_class = UserSerializer    
 
-class LoginView(generics.GenericAPIView):
-    serializer_class = UserLoginSerializer
+class LogoutView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
 
-    def post(self, request, *args, **kwargs):  
-        user = authenticate(username=request.data['username'], password=request.data['password'])  
-        if user:  
-            token = AccessToken.for_user(user)  
-            return Response({'token': str(token)}, status=status.HTTP_200_OK)  
-        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)  
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

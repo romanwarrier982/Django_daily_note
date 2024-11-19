@@ -1,5 +1,5 @@
 import React, { useState } from 'react';  
-import { ReactMic } from 'react-mic';  
+// import { ReactMic } from 'react-mic';
 
 const RecordAudio = ({ match }) => {  
     const [recording, setRecording] = useState(false);  
@@ -39,13 +39,13 @@ const RecordAudio = ({ match }) => {
     return (  
         <div>  
             <h1>Record Audio for Note</h1>  
-            <ReactMic  
+            {/* <ReactMic  
                 record={recording}  
                 className="sound-wave"  
                 onStop={onStop}  
                 strokeColor="#000000"  
                 backgroundColor="#FF4081"  
-            />  
+            />   */}
             <button onClick={startRecording}>Start</button>  
             <button onClick={stopRecording}>Stop</button>  
             {blob && <button onClick={uploadAudio}>Upload Audio</button>}  
