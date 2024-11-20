@@ -1,9 +1,7 @@
 import './App.css';
-import React, {useState} from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
-import Notes from './components/Notes';
-import RecordAudio from './components/RecordAudio';
 import { Logout } from './components/logout';
 import Signup from './components/Signup';
 import NotesListPage from './pages/NotesListPage';
@@ -19,7 +17,6 @@ function App() {
         <Route path="/notes" element={<NotesListPage />} />
         <Route path="/note/:id" element={<NotePage />} />
         <Route path="/new-note" element={<NotePage />} />
-        {/* <Route path="/record/:noteId" element={<RecordAudio />} /> */}
         <Route path="/logout" element={<Logout />} />
       </Routes>
     </BrowserRouter>

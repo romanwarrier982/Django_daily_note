@@ -1,13 +1,8 @@
 from rest_framework import serializers
-from .models import Note, Audio
+from .models import Note
 
 class NoteSerializer(serializers.ModelSerializer):  
     class Meta:  
         model = Note  
-        fields = ['id', 'title', 'description', 'created_at', 'updated_at']  
-
-class AudioSerializer(serializers.ModelSerializer):
-    class Meta:  
-        model = Audio  
-        fields = ['id', 'note', 'audio_file', 'uploaded_at']
+        fields = ['id', 'title', 'description', 'created_at', 'updated_at', 'audio_files']
     

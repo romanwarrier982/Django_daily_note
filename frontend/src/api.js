@@ -19,6 +19,10 @@ export const signup = async (userData) => {
 
 // Create Note  
 export const createNote = async (noteData, accessToken) => {
+    console.log("noteData is ", noteData)
+    for (const [key, value] of noteData.entries()) {  
+        console.log(key, value);  
+    }  
     const response = await axios.post(`${API_URL}notes/`, noteData, {
         headers: { Authorization: `Bearer ${accessToken}` }
     });
@@ -56,3 +60,30 @@ export const deleteNote = async (id, accessToken) => {
     });
     return response.data;
 };
+
+export const uploadAudio = async (id, file, accessToken) => {
+    const response = await axios.post(`${API_URL}notes/${id}/audio/`, file, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    return response.data;
+};
+
+
+export const refreshAccessToken = async (refreshToken) => {
+    try {
+        const response = await axios.post(`${API_URL}auth/token/refresh/`, {
+            refresh: refreshToken,
+        });
+
+        // Check if the response contains the new access token  
+        if (response.data && response.data.access) {
+            return response.data.access; // Return the new access token  
+        }
+        throw new Error('No access token returned');
+    } catch (error) {
+        console.error("Error refreshing access token:", error);
+        return null; // If refresh fails, return null (handle this case in your component)  
+    }
+};
+
+
