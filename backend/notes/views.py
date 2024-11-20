@@ -1,25 +1,72 @@
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from rest_framework import generics, viewsets, permissions, status
-from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
-from rest_framework.response import Response
+from rest_framework import viewsets
+from rest_framework import generics
+from rest_framework.views import APIView 
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from .models import Note, Audio
-from .serializers import NoteSerializer, AudioSerializer, UserSerializer
-from rest_framework.permissions import AllowAny  
-from rest_framework_simplejwt.views import TokenObtainPairView 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.utils.decorators import method_decorator  
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 
-class NoteViewSet(viewsets.ModelViewSet):
+from .models import Note, Audio
+from .serializers import NoteSerializer, AudioSerializer
+
+# Create Note  
+# class NoteCreateView(generics.CreateAPIView):
+#     queryset = Note.objects.all()
+#     serializer_class = NoteSerializer
+#     permission_classes = [IsAuthenticated]
+#     authentication_classes = [JWTAuthentication]
+
+#     def perform_create(self, serializer):
+#         print(self.request.user)
+#         serializer.save(user=self.request.user)
+
+# List Notes  
+class NoteListViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, viewsets.GenericViewSet):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
-    def get_queryset(self):  
-        return Note.objects.filter(user=self.request.user)  
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
-    def perform_create(self, serializer):  
-        serializer.save(user=self.request.user)  
+    def perform_update(self, serializer):
+        print(self.request.user)
+        super().perform_update(serializer) 
+
+# Retrieve Note  
+# class NoteDetailView(generics.RetrieveAPIView):  
+#     queryset = Note.objects.all()  
+#     serializer_class = NoteSerializer  
+#     permission_classes = [IsAuthenticated]  
+
+#     def get_queryset(self):  
+#         return self.queryset.filter(user=self.request.user)  
+
+# # Update Note  
+# class NoteUpdateView(generics.UpdateAPIView):  
+#     queryset = Note.objects.all()  
+#     serializer_class = NoteSerializer  
+#     permission_classes = [IsAuthenticated]  
+
+#     def get_queryset(self):  
+#         return self.queryset.filter(user=self.request.user)  
+
+# # Delete Note  
+# class NoteDeleteView(generics.DestroyAPIView):  
+#     queryset = Note.objects.all()  
+#     serializer_class = NoteSerializer  
+#     permission_classes = [IsAuthenticated]  
+
+#     def get_queryset(self):  
+#         return self.queryset.filter(user=self.request.user)  
 
 class AudioViewSet(viewsets.ModelViewSet):
     queryset = Audio.objects.all()
@@ -28,19 +75,3 @@ class AudioViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):  
         serializer.save()
-
-class RegisterView(generics.CreateAPIView):  
-    queryset = User.objects.all()  
-    serializer_class = UserSerializer    
-
-class LogoutView(APIView):
-    permission_classes = (IsAuthenticated,)
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
