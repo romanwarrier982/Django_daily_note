@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { signup } from '../api';
@@ -62,7 +62,7 @@ const Signup = () => {
                         />
                         {errors.password2 && <span>This field is required</span>}
                     </div>
-                    
+
                     <p className="my-3">
                         Already have an account? <Link to="/login">Login</Link>
                     </p>

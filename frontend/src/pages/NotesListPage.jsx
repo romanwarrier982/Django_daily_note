@@ -1,30 +1,41 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import ListItem from "../components/ListItem";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { listNotes } from '../api';
+import { listNotes, refreshAccessToken } from '../api';
 
 const NotesListPage = () => {
   const [notes, setNotes] = useState([]);
   const [darkMode, setDarkMode] = useState(true)
 
   useEffect(() => {
-    if (localStorage.getItem('access_token') === null) {
-      window.location.href = '/login'
-    }
-    else {
-      const fetchNotes = async () => {
-        try {
-          const notesData = await listNotes(localStorage.getItem('access_token'));
-          setNotes(notesData);
-        } catch (error) {
+    const fetchNotes = async (token) => {
+      try {
+        const notesData = await listNotes(token);
+        setNotes(notesData);
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          // Refresh the token if we get 401 Unauthorized
+          const newToken = await refreshAccessToken(localStorage.getItem('refresh_token'));
+          if (newToken) {
+            localStorage.setItem('access_token', newToken); // Save the new access token
+            return fetchNotes(newToken); // Retry fetching notes with the new token
+          } else {
+            window.location.href = '/login';
+          }
+        } else {
           console.error("Failed to fetch notes:", error);
         }
-      };
-
-      fetchNotes();
+      }
     };
+
+    const accessToken = localStorage.getItem('access_token');
+
+    if (accessToken === null) {
+      window.location.href = '/login';
+    } else {
+      fetchNotes(accessToken);
+    }
   }, []);
 
   return (

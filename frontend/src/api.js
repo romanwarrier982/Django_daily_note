@@ -56,3 +56,23 @@ export const deleteNote = async (id, accessToken) => {
     });
     return response.data;
 };
+
+
+export const refreshAccessToken = async (refreshToken) => {
+    try {
+        const response = await axios.post(`${API_URL}auth/token/refresh/`, {
+            refresh: refreshToken,
+        });
+
+        // Check if the response contains the new access token  
+        if (response.data && response.data.access) {
+            return response.data.access; // Return the new access token  
+        }
+        throw new Error('No access token returned');
+    } catch (error) {
+        console.error("Error refreshing access token:", error);
+        return null; // If refresh fails, return null (handle this case in your component)  
+    }
+};
+
+
