@@ -9,6 +9,10 @@ audio
 # Backup files # 
 *.bak
 
+# Testing files
+.pytest_cache/
+htmlcov/
+
 # Generated files
 .idea/**/contentModel.xml
 
