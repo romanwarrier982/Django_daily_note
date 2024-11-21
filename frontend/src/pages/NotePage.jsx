@@ -4,7 +4,7 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import RecordAudio from "../components/RecordAudio";
-import { getNote, createNote, updateNote, deleteNote } from '../api';
+import { getNote, createNote, updateNote, deleteNote } from '../api/api';
 
 
 let getTime = (note) => {

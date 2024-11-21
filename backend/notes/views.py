@@ -52,15 +52,7 @@ class NoteViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateMo
         serializer.save(user=self.request.user) 
 
     def perform_update(self, serializer):
-        print(self.request.user)
         super().perform_update(serializer)
-        
-        # # Handle audio file uploads from the update request (if needed)  
-        # audio_files = self.request.FILES.getlist('audio_files')  # Fetch audio files if provided
-        # print(audio_files)
-        # for audio_file in audio_files:  
-        #     audio = Audio(note=note, audio_file=audio_file)  # Create an Audio instance  
-        #     audio.save()  # Save the Audio instance to the database
 
     def destroy(self, request, *args, **kwargs):  
         note = self.get_object()  # Get the note to delete  

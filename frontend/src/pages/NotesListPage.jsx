@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ListItem from "../components/ListItem";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { listNotes, refreshAccessToken } from '../api';
+import { listNotes, refreshAccessToken } from '../api/api';
 
 const NotesListPage = () => {
   const [notes, setNotes] = useState([]);

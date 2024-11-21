@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { signup } from '../api';
+import { signup } from '../api/api';
 
 const Signup = () => {
 

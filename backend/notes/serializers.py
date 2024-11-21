@@ -24,14 +24,12 @@ class NoteSerializer(serializers.ModelSerializer):
         return note  
     
     def update(self, instance, validated_data):
-        print("###", validated_data)
         audio_data = validated_data.pop('audio_files', [])  
 
         # Update the note instance  
         instance.title = validated_data.get('title', instance.title)  
         instance.description = validated_data.get('description', instance.description)  
         instance.save()
-        print(instance)
 
         # Handle audio files (update or create)
         for audio in audio_data:
