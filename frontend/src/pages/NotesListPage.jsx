@@ -21,7 +21,7 @@ const NotesListPage = () => {
             localStorage.setItem('access_token', newToken); // Save the new access token
             return fetchNotes(newToken); // Retry fetching notes with the new token
           } else {
-            // window.location.href = '/login';
+            window.location.href = '/login';
           }
         } else {
           console.error("Failed to fetch notes:", error);

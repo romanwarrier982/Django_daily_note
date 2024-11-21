@@ -7,4 +7,8 @@ class Note(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    audio_files = models.FileField(upload_to='audio/', blank=True, null=True)
+
+class Audio(models.Model):  
+    note = models.ForeignKey(Note, related_name='audio_files', on_delete=models.CASCADE)  
+    name = models.FileField(upload_to='audio/')  
+    uploaded_at = models.DateTimeField(auto_now_add=True)

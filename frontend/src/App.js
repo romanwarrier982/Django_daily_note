@@ -1,9 +1,9 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './components/Login';
+import Login from './pages/Login';
 import { Logout } from './components/logout';
-import Signup from './components/Signup';
+import Signup from './pages/Signup';
 import NotesListPage from './pages/NotesListPage';
 import NotePage from './pages/NotePage';
 

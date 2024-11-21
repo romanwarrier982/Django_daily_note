@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { ReactMic } from 'react-mic';
-import axios from 'axios';
-
-const API_URL = "http://localhost:8000/api/";
 
 const RecordAudio = ({ onAudioUpload }) => {
     const [recording, setRecording] = useState(false);
-    const [recordedBlob, setRecordedBlob] = useState(null);
 
     const startRecording = () => {
         setRecording(true);
@@ -17,9 +13,10 @@ const RecordAudio = ({ onAudioUpload }) => {
     };
 
     const onStop = (blob) => {
-        setRecordedBlob(blob);
-        // Convert blob to file and pass it to onAudioUpload  
-        const file = new File([blob.blob], "audio_recording.wav", { type: "audio/wav" });
+        const currentDate = new Date();
+        console.log(currentDate.toISOString())
+        const formattedTime = currentDate.toISOString().replace(/[-:.T]/g, '').slice(0, 15);
+        const file = new File([blob.blob], `audio_recording_${formattedTime}.wav`, { type: "audio/wav" });
         onAudioUpload([file]);
     };
 
@@ -28,13 +25,13 @@ const RecordAudio = ({ onAudioUpload }) => {
             <h1 className='dark:text-white'>Record Audio for Note</h1>
             <ReactMic
                 record={recording}
-                className="sound-wave"
+                className="sound-wave w-100"
                 onStop={onStop}
                 strokeColor="#000000"
                 backgroundColor="gray"
             />
-            <button className='dark:text-white' onClick={startRecording}>Start</button>
-            <button className='dark:text-white' onClick={stopRecording}>Stop</button>
+            <button className='text-white py-2 px-3 rounded-xl mt-1 mx-2 bg-green-700' onClick={startRecording}>Start</button>
+            <button className='text-white py-2 px-3 rounded-xl mt-1 mx-2 bg-red-700' onClick={stopRecording}>Stop</button>
         </div>
     );
 };

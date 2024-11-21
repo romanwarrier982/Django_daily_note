@@ -1,11 +1,10 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { MdArrowBackIosNew } from "react-icons/md";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import RecordAudio from "../components/RecordAudio";
-import { getNote, createNote, updateNote, deleteNote, uploadAudio } from '../api';
+import { getNote, createNote, updateNote, deleteNote } from '../api';
 
 
 let getTime = (note) => {
@@ -17,19 +16,19 @@ const NotePage = () => {
 
   const [note, setNote] = useState({
     title: "",
-    description: "",
-    audio_files: []
+    description: ""
   });
   const [audioFiles, setAudioFiles] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const accessToken = localStorage.getItem('access_token')
+  const accessToken = localStorage.getItem('access_token');
 
   useEffect(() => {
     const fetchNote = async () => {
       try {
         const noteData = await getNote(id, accessToken);
+        console.log(noteData.audio_files)
         setNote(noteData);
         setAudioFiles(noteData.audio_files || []);
       } catch (error) {
@@ -37,32 +36,42 @@ const NotePage = () => {
       }
     };
 
-    if ( id === "new") {
-      setNote({title: "", description: "", audio_files: []});
+    if (id === "new") {
+      setNote({ title: "", description: "" });
     } else {
       fetchNote();
     }
   }, [id, accessToken]);
 
-  const handleUpdate = async () => {  
-    try {  
-      if (id !== 'new' && !note.title) {  
-        await deleteNote(id, accessToken);  
-      } else if (id !== 'new') {  
-        await updateNote(id, note, accessToken);  
-      } else if (id === 'new' && note) {
-        // await uploadAudio(audioFiles, id, accessToken);
+  const handleUpdate = async () => {
+    try {
+      if (id !== 'new' && !note.title) {
+        await deleteNote(id, accessToken);
+      } else if (id !== 'new') {
         const formData = new FormData();
         formData.append('title', note.title)
         formData.append('description', note.description)
-        formData.append('audio_files', audioFiles)
-        const createdNote = await createNote(formData, accessToken);
+        console.log(audioFiles)
+        audioFiles.forEach(file => {
+          if (file instanceof File) { 
+            formData.append('audio_files', file)
+          }
+        })
+        await updateNote(id, formData, accessToken);
+      } else if (id === 'new' && note) {
+        const formData = new FormData();
+        formData.append('title', note.title)
+        formData.append('description', note.description)
+        audioFiles.forEach(file => {
+          formData.append('audio_files', file)
+        })
+        await createNote(formData, accessToken);
       }
-      // navigate("/notes/");
-    } catch (error) {  
-      console.error("Failed to create/update note:", error);  
-    }  
-  };  
+      navigate("/notes/");
+    } catch (error) {
+      console.error("Failed to create/update note:", error);
+    }
+  };
 
   const handleDelete = () => {
     deleteNote(id, accessToken);
@@ -74,10 +83,10 @@ const NotePage = () => {
   };
 
   const handleAudioUpload = (files) => {
-    setAudioFiles([...audioFiles, ...files]);
+    setAudioFiles(prev => [...prev, ...files]);
   };
 
-  const removeAudioFile = (fileName) => {  
+  const removeAudioFile = (fileName) => {
     setAudioFiles(audioFiles.filter(file => file.name !== fileName)); // Remove file based on its name  
   };
 
@@ -87,7 +96,7 @@ const NotePage = () => {
         <section className=" border-sky-600 px-4 md:px-16">
           <Header darkMode={darkMode} setDarkMode={setDarkMode} />
           <div className="bg-transparent md:pt-2">
-            <div className="flex justify-between items-center mb-5 md:my-4">
+            <div className="flex justify-between items-center mb-3 md:my-4">
               <Link
                 className="w-10 h-10 flex justify-center items-center rounded-xl bg-gray-700 cursor-pointer"
                 to="/notes"
@@ -129,17 +138,26 @@ const NotePage = () => {
               onChange={(e) => handleNote(e)}
             ></textarea>
             <RecordAudio onAudioUpload={handleAudioUpload} />
-            <div className="mt-5">  
-              <h3 className="dark:text-white">Uploaded Audio Files:</h3>  
-              <ul>  
-                {audioFiles.map(file => (  
-                  <li key={file.name}>  
-                    {file.name}  
-                    <button onClick={() => removeAudioFile(file.name)} className="text-red-500 ml-3">Remove</button>  
-                  </li>  
-                ))}  
-              </ul>  
-            </div> 
+            <div className="mt-3">
+              <h3 className="dark:text-white">Uploaded Audio Files:</h3>
+              <ul>
+                {audioFiles?.map(file => (
+                  <li key={file.name}>
+                    {file.name.split('/').pop()}
+                    <button
+                      onClick={() => {
+                        const audio = new Audio("http://localhost:8000/" + file.name);
+                        audio.play();
+                      }}
+                      className="text-blue-500 ml-3"
+                    >
+                      Play
+                    </button>
+                    <button onClick={() => removeAudioFile(file.name)} className="text-red-500 ml-3">Remove</button>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
           <Footer />
         </section>

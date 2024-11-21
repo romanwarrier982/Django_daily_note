@@ -3,10 +3,6 @@ import moment from 'moment'
 import { Link } from "react-router-dom";
 import { GrAdd } from "react-icons/gr";
 
-let getTime = (note) => {
-  return new Date(note.updated_at).toLocaleDateString();
-};
-
 const getTitle = (note) => {
   let title = note.title.split("\n")[0];
   if (title.length > 30) {

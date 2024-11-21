@@ -19,10 +19,6 @@ export const signup = async (userData) => {
 
 // Create Note  
 export const createNote = async (noteData, accessToken) => {
-    console.log("noteData is ", noteData)
-    for (const [key, value] of noteData.entries()) {  
-        console.log(key, value);  
-    }  
     const response = await axios.post(`${API_URL}notes/`, noteData, {
         headers: { Authorization: `Bearer ${accessToken}` }
     });
@@ -56,13 +52,6 @@ export const updateNote = async (id, noteData, accessToken) => {
 // Delete Note  
 export const deleteNote = async (id, accessToken) => {
     const response = await axios.delete(`${API_URL}notes/${id}/`, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-    });
-    return response.data;
-};
-
-export const uploadAudio = async (id, file, accessToken) => {
-    const response = await axios.post(`${API_URL}notes/${id}/audio/`, file, {
         headers: { Authorization: `Bearer ${accessToken}` }
     });
     return response.data;
