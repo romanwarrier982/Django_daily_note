@@ -100,7 +100,10 @@ This is a comprehensive task for developing a note-taking application with integ
 8. (Optional) Run the frontend server. You can skip this step if you don't want to run the frontend separately as the frontend is already built and being served by the backend.
 
    ```sh
-   cd frontend && npm start
+   cd frontend
+   npm install
+   npm install react-mic --force
+   npm start
    ```
 
    This will run the frontend server on [http://localhost:3000](http://localhost:3000)
