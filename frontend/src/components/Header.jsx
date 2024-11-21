@@ -6,7 +6,7 @@ const Header = ({darkMode,setDarkMode}) => {
   return (
     <div className='flex justify-between items-baseline'>
       <Link to='/'>
-        <div className='dark:text-white  text-4xl py-8  font-bold'>Notes.</div>
+        <div className='dark:text-white  text-4xl py-3  font-bold'>Notes.</div>
       </Link>
       <BsMoonStarsFill onClick={() => setDarkMode(!darkMode)} className='dark:text-white text-xl cursor-pointer'/>
     </div>

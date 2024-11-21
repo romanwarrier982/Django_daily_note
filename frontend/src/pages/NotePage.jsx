@@ -28,7 +28,6 @@ const NotePage = () => {
     const fetchNote = async () => {
       try {
         const noteData = await getNote(id, accessToken);
-        console.log(noteData.audio_files)
         setNote(noteData);
         setAudioFiles(noteData.audio_files || []);
       } catch (error) {
@@ -51,7 +50,6 @@ const NotePage = () => {
         const formData = new FormData();
         formData.append('title', note.title)
         formData.append('description', note.description)
-        console.log(audioFiles)
         audioFiles.forEach(file => {
           if (file instanceof File) { 
             formData.append('audio_files', file)
@@ -117,7 +115,7 @@ const NotePage = () => {
                 Done
               </button>) : (<button
                 onClick={() => handleDelete()}
-                className="text-white py-2 px-3  rounded-xl bg-gray-700"
+                className="text-white py-2 px-3  rounded-xl bg-stone-950"
               >
                 Delete
               </button>)}
@@ -125,14 +123,14 @@ const NotePage = () => {
             <input
               autoFocus
               placeholder="Title"
-              className=" dark:text-white bg-transparent w-full h-[10vh] outline-none my-1 p-2 border-1 resize-none"
+              className=" dark:text-white bg-transparent w-full h-[6vh] outline-none my-1 p-2 border-2 border-cyan-900 resize-none"
               name="title"
               value={note?.title}
               onChange={(e) => handleNote(e)}
             ></input>
             <textarea
               placeholder="Description"
-              className=" dark:text-white bg-transparent w-full h-[30vh] outline-none p-2 border-1"
+              className=" dark:text-white bg-transparent w-full h-[25vh] outline-none p-2 border-2 border-cyan-900"
               name="description"
               value={note?.description}
               onChange={(e) => handleNote(e)}
@@ -142,7 +140,7 @@ const NotePage = () => {
               <h3 className="dark:text-white">Uploaded Audio Files:</h3>
               <ul>
                 {audioFiles?.map(file => (
-                  <li key={file.name}>
+                  <li className="dark:text-green-900" key={file.name}>
                     {file.name.split('/').pop()}
                     <button
                       onClick={() => {
