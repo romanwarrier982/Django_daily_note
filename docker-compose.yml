@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./note_app
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:  
+      - ./backend:/code
+    environment:  
+      - DEBUG=1  # Set your debug environment variable  
+      - DATABASE_URL=postgres://user:password@db:5432/dbname  # Adjust the credentials and database name to your needs  
+    depends_on:  
+      - db  # Ensure that the backend waits for the database to be ready  
+
+  frontend:
+    build:
+      context: ./note-taking-app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+
+  db:  
+    image: postgres:16  # Use the version of PostgreSQL you want  
+    volumes:  
+      - postgres_data:/var/lib/postgresql/data  
+    environment:  
+      - POSTGRES_USER=user  # Your database user  
+      - POSTGRES_PASSWORD=password  # Your database password  
+      - POSTGRES_DB=dbname  # Your database name  
+
+volumes:  
+  postgres_data:  # Define a volume to persist data  

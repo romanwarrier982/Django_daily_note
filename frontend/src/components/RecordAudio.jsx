@@ -14,7 +14,6 @@ const RecordAudio = ({ onAudioUpload }) => {
 
     const onStop = (blob) => {
         const currentDate = new Date();
-        console.log(currentDate.toISOString())
         const formattedTime = currentDate.toISOString().replace(/[-:.T]/g, '').slice(0, 15);
         const file = new File([blob.blob], `audio_recording_${formattedTime}.wav`, { type: "audio/wav" });
         onAudioUpload([file]);
@@ -25,7 +24,7 @@ const RecordAudio = ({ onAudioUpload }) => {
             <h1 className='dark:text-white'>Record Audio for Note</h1>
             <ReactMic
                 record={recording}
-                className="sound-wave w-100"
+                className="sound-wave w-100 h-10"
                 onStop={onStop}
                 strokeColor="#000000"
                 backgroundColor="gray"
