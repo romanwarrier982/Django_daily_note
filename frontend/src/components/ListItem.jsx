@@ -41,7 +41,7 @@ const ListItem = ({ note }) => {
         <div className="text-lg aspect-square rounded  hover:bg-slate-900 flex items-center justify-center">
           <Link className=" h-full w-full" to={`/note/new`}>
             <section className="flex justify-center h-full w-full">
-              <GrAdd color="white" className="text-3xl my-auto" />
+              <GrAdd role="img" aria-label="plus" color="white" className="text-3xl my-auto" />
             </section>
           </Link>
         </div>
