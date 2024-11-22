@@ -2,40 +2,22 @@ import React, { useEffect, useState } from "react";
 import ListItem from "../components/ListItem";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { listNotes, refreshAccessToken } from '../api/api';
+import { listNotes } from '../services/api';
 
 const NotesListPage = () => {
   const [notes, setNotes] = useState([]);
   const [darkMode, setDarkMode] = useState(true)
 
   useEffect(() => {
-    const fetchNotes = async (token) => {
+    const fetchNotes = async () => {
       try {
-        const notesData = await listNotes(token);
+        const notesData = await listNotes();
         setNotes(notesData);
       } catch (error) {
-        if (error.response && error.response.status === 401) {
-          // Refresh the token if we get 401 Unauthorized
-          const newToken = await refreshAccessToken(localStorage.getItem('refresh_token'));
-          if (newToken) {
-            localStorage.setItem('access_token', newToken); // Save the new access token
-            return fetchNotes(newToken); // Retry fetching notes with the new token
-          } else {
-            window.location.href = '/login';
-          }
-        } else {
-          console.error("Failed to fetch notes:", error);
-        }
+        console.error("Failed to fetch notes:", error);
       }
     };
-
-    const accessToken = localStorage.getItem('access_token');
-
-    if (accessToken === null) {
-      window.location.href = '/login';
-    } else {
-      fetchNotes(accessToken);
-    }
+    fetchNotes();
   }, []);
 
   return (
