@@ -12,7 +12,7 @@ describe('Header Component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Notes.')).toBeInTheDocument();
+    expect(screen.getByText('Daily Notes')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /notes/i })).toBeInTheDocument();
     expect(screen.getByRole('img')).toBeInTheDocument(); // The moon icon
   });

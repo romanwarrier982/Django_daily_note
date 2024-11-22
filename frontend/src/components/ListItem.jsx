@@ -12,7 +12,6 @@ const getTitle = (note) => {
 };
 
 let getContent = (note) => {
-  let title = getTitle(note)
   let content = note.description
 
   if (content.length > 45) {

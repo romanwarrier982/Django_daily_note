@@ -131,9 +131,9 @@ const NotePage = () => {
               rows={6}
               value={note?.description}
               onChange={handleNote}
-            ></textarea>
+            />
           </div>
-          <RecordAudio onAudioUpload={handleAudioUpload} />
+          <RecordAudio onAudioUpload={handleAudioUpload} darkMode={darkMode} />
           <div className="mt-8">
             <h3 className="text-lg font-semibold mb-4">Uploaded Audio Files</h3>
             <ul className="space-y-2">

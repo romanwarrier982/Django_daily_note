@@ -12,10 +12,10 @@ describe('RecordAudio Component', () => {
   it('starts and stops recording', () => {
     render(<RecordAudio onAudioUpload={jest.fn()} />);
 
-    fireEvent.click(screen.getByText(/record/i));
-    expect(screen.getByText(/stop/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole(/record/i));
+    expect(screen.getByRole(/stop/i)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText(/stop/i));
-    expect(screen.getByText(/record/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole(/stop/i));
+    expect(screen.getByRole(/record/i)).toBeInTheDocument();
   });
 });
