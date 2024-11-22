@@ -4,20 +4,15 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import RecordAudio from "../components/RecordAudio";
-import { getNote, createNote, updateNote, deleteNote } from '../services/api';
+import { getNote, createNote, updateNote, deleteNote } from "../services/api";
 
-
-let getTime = (note) => {
+const getTime = (note) => {
   return new Date(note?.created_at).toLocaleDateString();
 };
 
 const NotePage = () => {
-  const [darkMode, setDarkMode] = useState(true)
-
-  const [note, setNote] = useState({
-    title: "",
-    description: ""
-  });
+  const [darkMode, setDarkMode] = useState(true);
+  const [note, setNote] = useState({ title: "", description: "" });
   const [audioFiles, setAudioFiles] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -42,26 +37,17 @@ const NotePage = () => {
 
   const handleUpdate = async () => {
     try {
-      if (id !== 'new' && !note.title) {
-        await deleteNote(id);
-      } else if (id !== 'new') {
-        const formData = new FormData();
-        formData.append('title', note.title)
-        formData.append('description', note.description)
-        audioFiles.forEach(file => {
-          if (file instanceof File) { 
-            formData.append('audio_files', file)
-          }
-        })
-        await updateNote(id, formData);
-      } else if (id === 'new' && note) {
-        const formData = new FormData();
-        formData.append('title', note.title)
-        formData.append('description', note.description)
-        audioFiles.forEach(file => {
-          formData.append('audio_files', file)
-        })
+      const formData = new FormData();
+      formData.append("title", note.title);
+      formData.append("description", note.description);
+      audioFiles.forEach((file) => {
+        if (file instanceof File) formData.append("audio_files", file);
+      });
+
+      if (id === "new") {
         await createNote(formData);
+      } else {
+        await updateNote(id, formData);
       }
       navigate("/notes/");
     } catch (error) {
@@ -73,97 +59,122 @@ const NotePage = () => {
     try {
       await deleteNote(id);
       navigate("/notes/");
-    } catch(err) {
+    } catch (err) {
       console.error("Failed to delete note:", err);
     }
-  }
+  };
 
   const handleNote = (e) => {
-    setNote(({ ...note, [e.target.name]: e.target.value }));
+    setNote({ ...note, [e.target.name]: e.target.value });
   };
 
   const handleAudioUpload = (files) => {
-    setAudioFiles(prev => [...prev, ...files]);
+    setAudioFiles((prev) => [...prev, ...files]);
   };
 
   const removeAudioFile = (fileName) => {
-    setAudioFiles(audioFiles.filter(file => file.name !== fileName)); // Remove file based on its name  
+    setAudioFiles(audioFiles.filter((file) => file.name !== fileName));
   };
 
   return (
-    <div className={darkMode ? 'dark' : ''}>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-lexend ">
-        <section className=" border-sky-600 px-4 md:px-16">
-          <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-          <div className="bg-transparent md:pt-2">
-            <div className="flex justify-between items-center mb-3 md:my-4">
-              <Link
-                className="w-10 h-10 flex justify-center items-center rounded-xl bg-gray-700 cursor-pointer"
-                to="/notes"
-              >
-                <MdArrowBackIosNew className="text-white text-xl " />
-              </Link>
-              <div className="dark:text-white">{id !== 'new' && getTime(note)}</div>
-              {id === 'new' ? <></> : (<button
-                onClick={handleUpdate}
-                className="text-white py-2 px-3  rounded-xl bg-gray-700"
-              >
-                Update
-              </button>)}
-              {id === 'new' ? (<button
-                onClick={handleUpdate}
-                className="text-white py-2 px-3  rounded-xl bg-gray-700"
-              >
-                Done
-              </button>) : (<button
-                onClick={() => handleDelete()}
-                className="text-white py-2 px-3  rounded-xl bg-stone-950"
-              >
-                Delete
-              </button>)}
+    <div className={darkMode ? "dark" : ""}>
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-lexend">
+        <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+        <div className="container mx-auto py-8 px-4 md:px-16">
+          <div className="flex items-center justify-between mb-8">
+            <Link
+              to="/notes"
+              className="w-10 h-10 flex justify-center items-center bg-gray-800 dark:bg-gray-700 rounded-lg text-gray-100 hover:bg-gray-700 dark:hover:bg-gray-600"
+            >
+              <MdArrowBackIosNew size={20} />
+            </Link>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {id !== "new" && getTime(note)}
             </div>
+            {id === "new" ? (
+              <button
+                onClick={handleUpdate}
+                className="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Add
+              </button>
+            ) : (
+              <div className="flex space-x-2">
+                <button
+                  onClick={handleUpdate}
+                  className="py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="space-y-6">
             <input
-              autoFocus
-              placeholder="Title"
-              className=" dark:text-white bg-transparent w-full h-[6vh] outline-none my-1 p-2 border-2 border-cyan-900 resize-none"
+              type="text"
               name="title"
+              placeholder="Title"
+              className="w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={note?.title}
-              onChange={(e) => handleNote(e)}
-            ></input>
+              onChange={handleNote}
+            />
             <textarea
-              placeholder="Description"
-              className=" dark:text-white bg-transparent w-full h-[25vh] outline-none p-2 border-2 border-cyan-900"
               name="description"
+              placeholder="Description"
+              className="w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={6}
               value={note?.description}
-              onChange={(e) => handleNote(e)}
+              onChange={handleNote}
             ></textarea>
-            <RecordAudio onAudioUpload={handleAudioUpload} />
-            <div className="mt-3">
-              <h3 className="dark:text-white">Uploaded Audio Files:</h3>
-              <ul>
-                {audioFiles?.map(file => (
-                  <li className="dark:text-green-900" key={file.name}>
-                    {file.name.split('/').pop()}
+          </div>
+          <RecordAudio onAudioUpload={handleAudioUpload} />
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold mb-4">Uploaded Audio Files</h3>
+            <ul className="space-y-2">
+              {audioFiles.map((file) => (
+                <li
+                  key={file.name}
+                  className="flex justify-between items-center bg-gray-200 dark:bg-gray-800 rounded-lg p-4"
+                >
+                  <span>{file.name.split("/").pop()}</span>
+                  <div className="flex items-center space-x-4">
                     <button
                       onClick={() => {
-                        const audio = new Audio("http://localhost:8000/" + file.name);
+                        const audio = new Audio(
+                          "http://localhost:8000/" + file.name
+                        );
                         audio.play();
                       }}
-                      className="text-blue-500 ml-3"
+                      className="text-blue-600 hover:text-blue-700"
                     >
-                      Play
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" />
+                      </svg>
                     </button>
-                    <button onClick={() => removeAudioFile(file.name)} className="text-red-500 ml-3">Remove</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                    <button
+                      onClick={() => removeAudioFile(file.name)}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                      </svg>
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
-          <Footer />
-        </section>
+        </div>
+        <Footer />
       </div>
     </div>
-
   );
 };
 

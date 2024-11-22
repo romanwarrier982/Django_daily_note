@@ -3,38 +3,94 @@
 @tailwind utilities;
 
 @layer utilities {
-  .notes div:nth-child(odd) {
-   background-color:  #DDE596;
+  .notes div:nth-child(11n + 1) {
+    background-color: #DDE596;
   }
-  .notes div:nth-child(even) {
+
+  .notes div:nth-child(11n + 1) .title {
+    background-color: #cad284;
+  }
+
+  .notes div:nth-child(11n + 2) {
     background-color: #80BEB0;
   }
-  .notes div:nth-child(3n) {
+
+  .notes div:nth-child(11n + 2) .title {
+    background-color: #71ac9c;
+  }
+
+  .notes div:nth-child(11n + 3) {
     background-color: #fe6678;
   }
-  .notes div:nth-child(4n) {
-    background-color: #AFD4D5;
+
+  .notes div:nth-child(11n + 3) .title {
+    background-color: #f85c6e;
   }
-  .notes div:nth-child(5n) {
+
+  .notes div:nth-child(11n + 4) {
+    background-color: #DEF3A1;
+  }
+
+  .notes div:nth-child(11n + 4) .title {
+    background-color: #cfe392;
+  }
+
+  .notes div:nth-child(11n + 5) {
     background-color: #6BC7E5;
   }
-  .notes div:nth-child(6n) {
+
+  .notes div:nth-child(11n + 5) .title {
+    background-color: #5fb8d6;
+  }
+
+  .notes div:nth-child(11n + 6) {
     background-color: #6F88A2;
   }
-  .notes div:nth-child(7n) {
+
+  .notes div:nth-child(11n + 6) .title {
+    background-color: #667f9a;
+  }
+
+  .notes div:nth-child(11n + 7) {
     background-color: #d7a548;
   }
-  .notes div:nth-child(8n) {
+
+  .notes div:nth-child(11n + 7) .title {
+    background-color: #cb9b42;
+  }
+
+  .notes div:nth-child(11n + 8) {
     background-color: #FCCACF;
   }
-  .notes div:nth-child(9n) {
+
+  .notes div:nth-child(11n + 8) .title {
+    background-color: #f2bec3;
+  }
+
+  .notes div:nth-child(11n + 9) {
     background-color: #C68FD1;
   }
-  .notes div:nth-child(10n) {
+
+  .notes div:nth-child(11n + 9) .title {
+    background-color: #bc84c7;
+  }
+
+  .notes div:nth-child(11n + 10) {
     background-color: #FFE0A2;
   }
+
+  .notes div:nth-child(11n + 10) .title {
+    background-color: #f1d395;
+  }
+
+
+
   .notes div:nth-child(11n) {
-    background-color: #DEF3A1;
+    background-color: #AFD4D5;
+  }
+
+  .notes div:nth-child(11n) .title {
+    background-color: #92cccd;
   }
 }
 
